@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poemas</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9ecef;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #343a40;
+            margin-top: 20px;
+        }
+
+        form {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        select {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            margin: 15px auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        li:hover {
+            transform: scale(1.02);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #495057;
+        }
+
+        img {
+            display: block;
+            margin: 15px auto;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 250px;
+            height: auto;
+        }
+
+        p {
+            color: #6c757d;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .share-button {
+            display: block;
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+            width: 150px;
+            margin: 10px auto 0;
+            text-align: center;
+        }
+
+        .share-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script>
+        function filterPoems() {
+            const selectElement = document.getElementById('categoria');
+            selectElement.addEventListener('change', function() {
+                this.form.submit();
+            });
+        }
+        window.onload = filterPoems;
+    </script>
+</head>
+<body>
+    <h1>Poemas</h1>
+
+    <form method="get">
+        <label for="categoria"><strong>Filtrar por categoría:</strong></label>
+        <select name="categoria" id="categoria">
+            <option value="romantico" {% if request.GET.categoria == 'romantico' %}selected{% endif %}>Romántico</option>
+            <option value="tragico" {% if request.GET.categoria == 'tragico' %}selected{% endif %}>Trágico</option>
+            <option value="drama" {% if request.GET.categoria == 'drama' %}selected{% endif %}>Drama</option>
+        </select>
+    </form>
+
+    <ul>
+        {% for poema in poemas %}
+            <li>
+                <h2>{{ poema.titulo }}</h2>
+                <img src="{{ poema.imagen_url }}" alt="Imagen del poema">
+                <p>{{ poema.contenido }}</p>
+                <a class="share-button" href="mailto:?subject={{ poema.titulo }}&body={{ poema.contenido|urlencode }}">Compartir por correo</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
